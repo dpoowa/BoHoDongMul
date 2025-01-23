@@ -24,7 +24,8 @@ import reactor.util.retry.Retry;
 
 @Service
 public class BHDMRequestAPIService implements HelppetfExecuteMono<BHDMItemsVo>{
-	
+	// 서버 캐싱 기능 추가해서 응답속도 개선해보기
+	// OR 데이터베이스 저장 방식
 	// WebClient는 비동기적으로 HTTP 요청을 보내기 위해 사용되는 스프링 WebFlux의 클라이언트이다.
 	private final ApikeyConfig apikeyConfig;
 	private final WebClient webClient;
@@ -57,7 +58,7 @@ public class BHDMRequestAPIService implements HelppetfExecuteMono<BHDMItemsVo>{
      * @throws Exception 예외 발생 시
      * 	빈 리스트를 가진 HelpPetfAdoptionItemsVo를 생성하고, 내부 서버 오류 상태를 반환
      */
-	@Cacheable("adoptionData") // 캐싱 가능 어노테이션
+	@Cacheable(value = "adoptionData", key = "#request.getParameter('pageNo')") // 캐싱 가능 어노테이션
 	public Mono<ResponseEntity<BHDMItemsVo>> fetchAdoptionData(HttpServletRequest request) throws Exception {
 		/**
 		 * 작동 : .get() : http get 요청 보냄 .retrieve() : 서버로부터 응답 받아옴 .onStatus() : 4xx, 5xx
@@ -65,12 +66,13 @@ public class BHDMRequestAPIService implements HelppetfExecuteMono<BHDMItemsVo>{
 		 * 
 		 * 파싱 -> .map(json -> ... )} : parsingJsonObject() 메서드 호출
 		 */		
+				
 		return webClient.get().uri(buildUrl(request))
 				.retrieve()
 				.onStatus(HttpStatus::is4xxClientError, clientResponse -> Mono.error(new Exception("Client Error")))
 				.onStatus(HttpStatus::is5xxServerError, clientResponse -> Mono.error(new Exception("Server Error")))
 				.bodyToMono(String.class) // JSON 데이터를 문자열로 받음
-				.retryWhen(Retry.backoff(3, Duration.ofSeconds(5)))
+				.retryWhen(Retry.backoff(2, Duration.ofSeconds(2)))
 				.map(json -> {
 					BHDMItemsVo adoptionItems;
 					try { // try: json 파싱
@@ -81,7 +83,8 @@ public class BHDMRequestAPIService implements HelppetfExecuteMono<BHDMItemsVo>{
 						return new ResponseEntity<>(new BHDMItemsVo(List.of()),
 								HttpStatus.INTERNAL_SERVER_ERROR);
 					}
-				}).onErrorReturn(
+				})
+				.onErrorReturn(
 						new ResponseEntity<>(new BHDMItemsVo(List.of()), HttpStatus.INTERNAL_SERVER_ERROR));
 	}
 	
@@ -99,7 +102,7 @@ public class BHDMRequestAPIService implements HelppetfExecuteMono<BHDMItemsVo>{
 		String org_cd = setValueOfParam(request, "org_cd");
 		String upKind = setValueOfParam(request, "upKind");
 
-		String numOfRows = "&numOfRows=" + "80";
+		String numOfRows = "&numOfRows=" + "8";
 		String _type = "&_type=" + "json";
 		String extraParam = pageNo + numOfRows + _type;
 		String addParameters = apikey + upr_cd + org_cd + upKind + extraParam;
@@ -140,6 +143,7 @@ public class BHDMRequestAPIService implements HelppetfExecuteMono<BHDMItemsVo>{
      * @throws Exception JSON 파싱 및 매핑 오류 발생 시
 	 */
 	<T> T parsingJsonObject(String json, Class<T> valueType) throws Exception {
+	
 		// 예시) HelpPetfAdoptionItemsVo에 json value의 Object 형식을 매핑해 return
 		try {
 			// ObjectMapper mapper: ObjectMapper는 Jackson 라이브러리의 클래스이다. 자동으로 Bean으로 등록된다.

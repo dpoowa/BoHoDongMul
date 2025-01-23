@@ -60,7 +60,7 @@ $(document).ready(function() {
 
 	function fetchData(currentPage, currPageGroup, formParam) {
 		
-		const url = `/bohodongmuls?pageNo=${currPageGroup}&${formParam}`;
+		const url = `/bohodongmul/api/data?pageNo=${currPageGroup}&${formParam}`;
 		
 		fetch(url ,{
 			method: 'get',
@@ -326,7 +326,7 @@ $(document).ready(function() {
 		        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 				
 				// 커스텀 마커 이미지 생성
-				var imageSrc = '/static/Images/BHDM/kakaoMap/애완동물_아이콘_제작자_monkik_Flaticon.png',
+				var imageSrc = '/static/Images/BHDM/kakaoMap/pet_icon__monkik_Flaticon.png',
 					imageSize = new kakao.maps.Size(64, 64);
 
 				var makerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
