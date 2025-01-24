@@ -1,32 +1,3 @@
-/**
- * 이 스크립트는 입양센터 메인 페이지를 로드하면 공공데이터포털에 데이터를 요청하여,
- * 필터링이 설정되지 않은 Json 데이터를 서버(Java)로 전송하는 Ajax 코드와,
- * 필터링 선택 후 버튼 클릭 시 설정된 필터 기준으로 데이터를 다시 요청하는 코드로 구성되어 있다.
- * 
- * 데이터가 정상적으로 수신되면, 해당 데이터를 테이블 형식으로 화면에 출력한다.
- * 
- * 각 도시 코드에 대한 시/군/구 코드와 각 동물 종류에 따른 품종 코드를 
- * Object 형태로 저장한 파일을 import하여 사용한다. 
- * 유저가 필터에서 대분류(도시, 동물 종류)를 선택하면,
- * 선택된 대분류 값에 맞춰 소분류(시/군/구, 동물 품종)가 동적으로 업데이트된다.
- * 
- * 검색 버튼을 눌러 필터링이 포함된 데이터를 불러온 이후에도 선택된 필터링은 유지된다.
- * 초기화 버튼을 눌러 필터링을 초기화할 수 있다.
- * 
- * 메인 페이지의 카드레이아웃을 클릭하면, 해당하는 영역에 해당하는 게시글이 표시된다.
- * 메인 페이지 전체가 포함되어 있는 div의 스타일을 display: none으로 만들어 보이지 않게 하고,
- * 상세 페이지 전체가 포함되어 있는 div의 스타일을 display: block으로 만들어 보이게 한다.
- * (목록으로 클릭 시 반대로 적용)
- * 상세 페이지 진입 시 해당하는 게시글의 주소를 표시하는 지도를 생성한다.
- * 
- * 
- * dataset을 이용해 메인 페이지에 카드레이아웃이 배치될 때 각각에 해당하는 인덱스 번호를 저장한다.
- * 카드레이아웃을 눌렀을 때, 해당 카드에 저장되어 있는 글 번호를 추출하여 전송, 상세 내용을 불러온다.
- * 
- * 유저의 열람이 끝난 뒤, 목록으로 버튼을 누르면 메인 페이지로 복귀된다.
- * 
- */
-
 
 // import { kindOptions } from '/static/js/BHDM/kind_data.js'; // 품종 데이터 Object import
 import { orgCdOptions } from '/static/js/BHDM/org_data.js'; // 지역 데이터 Object import
@@ -34,15 +5,11 @@ import { orgCdOptions } from '/static/js/BHDM/org_data.js'; // 지역 데이터 
 
 /*
 
-입양센터 메인페이지
+메인페이지
 
 */
 
 $(document).ready(function() {
-	
-	// 메인 nav, 서브 nav '선택됨' 클래스 설정
-//	document.getElementById(main_navbar_id).classList.add('selected');
-//	document.getElementById(sub_navbar_id).classList.add('selected');
 	
 	pageScroll(0)
 	
