@@ -102,7 +102,7 @@ public class BHDMRequestAPIService implements HelppetfExecuteMono<BHDMItemsVo>{
 		String org_cd = setValueOfParam(request, "org_cd");
 		String upKind = setValueOfParam(request, "upKind");
 
-		String numOfRows = "&numOfRows=" + "8";
+		String numOfRows = "&numOfRows=" + "80";
 		String _type = "&_type=" + "json";
 		String extraParam = pageNo + numOfRows + _type;
 		String addParameters = apikey + upr_cd + org_cd + upKind + extraParam;
