@@ -8,7 +8,10 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class JSONItemDto {
-
+	
+    public JSONItemDto() {
+    }
+    
 //	공고번호
 	@JsonProperty("desertionNo")
 	private String desertionNo;

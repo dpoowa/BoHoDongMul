@@ -76,7 +76,19 @@
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20231013</version>
-		</dependency>		 			 
+		</dependency>		 
+		
+	    <!-- Spring Boot Cache starter -->
+	    <dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-starter-cache</artifactId>
+	    </dependency>			
+	    
+	    <!-- Redis -->
+	    <dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency> 
 	</dependencies>
 
 	<build>

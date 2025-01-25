@@ -20,7 +20,7 @@
 		<div id="filter_form">
 			<div>
 				<span>필터로 인연 찾아보기 </span> <br /> <br />
-				<form action="#">
+				<form id="paramFilter" action="#">
 					<!-- 도시 -->
 					<select name="upr_cd" id="upr_cd">
 						<option value='any' selected>시, 도</option>
@@ -49,7 +49,7 @@
 					</select>
 	
 					<!-- 동물 종류 선택 -->
-					<select id="upKind" name="upKind">
+					<select id="upkind" name="upkind">
 						<option value="any" selected>동물종류</option>
 						<option value="417000">강아지</option>
 						<option value="422400">고양이</option>

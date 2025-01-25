@@ -21,7 +21,7 @@ $(document).ready(function() {
 	let currPageGroup = 1; // 현재 페이지 그룹
 	let totalPages = 0; // 총 페이지 수
 	let preEndPage = 0; // 이전 페이지의 마지막 페이지 번호
-	let formParam = ''; // form (필터) 의 파라미터값
+	let formParam = 'upr_cd=any&org_cd=any&upkind=any'; // form (필터) 의 파라미터값
 	
 	fetchData(currentPage, currPageGroup, formParam); // 페이지 로드 시 호출 (formParam은 공백: 필터가 없으므로)
 
@@ -39,6 +39,7 @@ $(document).ready(function() {
 			return response.json();
 		})
 		.then(data => {
+			console.log(data);
 			adoptionItems = data.item; // 배열에 아이템 대입
 			totalItems = adoptionItems.length; // 받아온 데이터에서 총 item 수 계산
 			totalPages = Math.ceil(totalItems / itemsPerPage); // 총 페이지 수 계산
@@ -69,7 +70,8 @@ $(document).ready(function() {
 		const visibleItems = adoptionItems.slice(start, end);
 		// item 객체의 정보를 테이블로 출력
 		let cards = '';
-
+		$('#adoptionContainer').empty();
+		
 		$.each(visibleItems, function(index, item) {
 			// 받아온 정보의 YYYYMMDD를 각각 분리한다.
 			let day = item.happenDt.substr(6, 2);
@@ -178,8 +180,9 @@ $(document).ready(function() {
 	// 필터 선택 후 filterSubmit 클릭 시 호출
 	$('#filterSubmit').on('click', function(event) {
 		event.preventDefault(); // 기본 form 제출 동작 방지 (기본 링크를 이것으로 대체함)
-		formParam = $('#filter_form form').serialize(); // form 데이터 시리얼라이즈
+		formParam = $('#paramFilter').serialize(); // form 데이터 시리얼라이즈
 		currentPage = 1; // 필터링 시 페이지를 1로 리셋
+		console.log('filterSubmit | ', formParam);
 		fetchData(currentPage, currPageGroup, formParam); // 필터 데이터를 포함해서 fetchData 호출
 	});
 
@@ -192,7 +195,7 @@ $(document).ready(function() {
 
 		// option 태그의 선택값을 인덱스넘버 0으로 바꿈
 		$("#upr_cd option:eq(0)").prop("selected", true);
-		$("#upKind option:eq(0)").prop("selected", true);
+		$("#upkind option:eq(0)").prop("selected", true);
 		$("#org_cd option:eq(0)").prop("selected", true);
 
 		fetchData(currentPage, currPageGroup, formParam); // 필터 데이터 초기화한 뒤 fetchData 재호출
